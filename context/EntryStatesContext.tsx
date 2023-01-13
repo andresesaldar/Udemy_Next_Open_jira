@@ -9,14 +9,26 @@ import EntryState from "../models/entry-state";
 
 type EntryStatesMutations = {
 	setEntryStates: (entryStates: EntryState[]) => void;
+	addEntryState: (
+		entryStateData: Omit<EntryState, "createdAt" | "_id">,
+	) => void;
 };
 
 const entryStatesMutations = (
 	dispatch: Dispatch<EntryStatesActions>,
 ): EntryStatesMutations => ({
-	setEntryStates: (EntryStates) =>
+	addEntryState: (entryStateData) =>
 		dispatch({
-			payload: EntryStates,
+			payload: {
+				...entryStateData,
+				_id: Math.random().toString(),
+				createdAt: Date.now(),
+			},
+			type: EntryStatesActionTypes.ADD_ENTRY_STATE,
+		}),
+	setEntryStates: (entryStates) =>
+		dispatch({
+			payload: entryStates,
 			type: EntryStatesActionTypes.SET_ENTRY_STATES,
 		}),
 });

@@ -18,7 +18,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children, title = "Open Jira" }) => (
 			<Navbar />
 			<Sidebar />
 		</SidebarProvider>
-		<Container sx={{ paddingY: "10px" }}>
+		<Container maxWidth="xl" sx={{ paddingY: 1 }}>
 			<main>{children}</main>
 		</Container>
 	</>

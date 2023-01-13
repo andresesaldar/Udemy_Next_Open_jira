@@ -9,11 +9,27 @@ import Entry from "../models/entry";
 
 type EntriesMutations = {
 	setEntries: (entries: Entry[]) => void;
+	addEntry: (entryData: Omit<Entry, "createdAt" | "_id">) => void;
+	changeEntryState: (id: string, stateId: string) => void;
 };
 
 const entriesMutations = (
 	dispatch: Dispatch<EntriesActions>,
 ): EntriesMutations => ({
+	addEntry: (entryData) =>
+		dispatch({
+			payload: {
+				...entryData,
+				_id: Math.random().toString(),
+				createdAt: Date.now(),
+			},
+			type: EntriesActionTypes.ADD_ENTRY,
+		}),
+	changeEntryState: (id, stateId) =>
+		dispatch({
+			payload: { id, stateId },
+			type: EntriesActionTypes.CHANGE_ENTRY_STATE,
+		}),
 	setEntries: (entries) =>
 		dispatch({ payload: entries, type: EntriesActionTypes.SET_ENTRIES }),
 });

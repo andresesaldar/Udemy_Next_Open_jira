@@ -4,6 +4,8 @@ import Entry from "../models/entry";
 
 export enum EntriesActionTypes {
 	SET_ENTRIES = "[Entries] Set entries",
+	ADD_ENTRY = "[Entries] Add entry",
+	CHANGE_ENTRY_STATE = "[Entries] Change entry state",
 }
 
 export type EntriesState = {
@@ -50,18 +52,45 @@ const initialEntriesState: EntriesState = {
 	],
 };
 
-export type EntriesActions = Action<EntriesActionTypes.SET_ENTRIES, Entry[]>;
+export type EntriesActions =
+	| Action<EntriesActionTypes.SET_ENTRIES, Entry[]>
+	| Action<EntriesActionTypes.ADD_ENTRY, Entry>
+	| Action<
+			EntriesActionTypes.CHANGE_ENTRY_STATE,
+			{ id: string; stateId: string }
+	  >;
 
 const entriesReducer: Reducer<EntriesState, EntriesActions> = (
 	state,
 	{ type, payload },
 ) => {
-	if (type === EntriesActionTypes.SET_ENTRIES)
-		return {
-			...state,
-			entries: payload,
-		};
-	return state;
+	switch (type) {
+		case EntriesActionTypes.SET_ENTRIES:
+			return {
+				...state,
+				entries: payload,
+			};
+		case EntriesActionTypes.ADD_ENTRY:
+			return {
+				...state,
+				entries: [{ ...payload }, ...state.entries],
+			};
+		case EntriesActionTypes.CHANGE_ENTRY_STATE:
+			const entry = state.entries.findIndex((e) => e._id === payload.id);
+			const newEntries = [...state.entries];
+			if (entry >= 0) {
+				newEntries[entry] = {
+					...newEntries[entry],
+					stateId: payload.stateId,
+				};
+			}
+			return {
+				...state,
+				entries: newEntries,
+			};
+		default:
+			return state;
+	}
 };
 
 export const useEntriesReducer = (): [EntriesState, Dispatch<EntriesActions>] =>
