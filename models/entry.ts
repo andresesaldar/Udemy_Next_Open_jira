@@ -1,9 +1,9 @@
 import Entity from "./entity";
 
-type Entry = Entity & {
+type Entry<T = string> = Entity & {
 	title: string;
 	content: string;
-	stateId: string;
+	stateId: T;
 };
 
 export default Entry;

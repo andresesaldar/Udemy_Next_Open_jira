@@ -9,7 +9,7 @@ import Entry from "../models/entry";
 
 type EntriesMutations = {
 	setEntries: (entries: Entry[]) => void;
-	addEntry: (entryData: Omit<Entry, "createdAt" | "_id">) => void;
+	addEntry: (entryData: Pick<Entry, "title" | "content" | "stateId">) => void;
 	changeEntryState: (id: string, stateId: string) => void;
 };
 

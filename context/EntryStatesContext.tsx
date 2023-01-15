@@ -10,7 +10,7 @@ import EntryState from "../models/entry-state";
 type EntryStatesMutations = {
 	setEntryStates: (entryStates: EntryState[]) => void;
 	addEntryState: (
-		entryStateData: Omit<EntryState, "createdAt" | "_id">,
+		entryStateData: Pick<EntryState, "name" | "position">,
 	) => void;
 };
 
