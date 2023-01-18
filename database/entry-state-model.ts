@@ -7,9 +7,8 @@ const entryStateSchema = new Schema<EntryState>(
 		position: { required: true, type: Number },
 	},
 	{
-		timestamps: {
-			createdAt: true,
-		},
+		collection: "entry_states",
+		timestamps: true,
 	},
 );
 

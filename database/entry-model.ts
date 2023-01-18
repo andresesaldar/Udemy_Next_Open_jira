@@ -11,9 +11,7 @@ const entrySchema = new Schema<Entry<Schema.Types.ObjectId>>(
 		title: { required: true, type: String },
 	},
 	{
-		timestamps: {
-			createdAt: true,
-		},
+		timestamps: true,
 	},
 );
 

@@ -22,7 +22,7 @@ type EntryStateProps = {
 const EntryState: FC<EntryStateProps> = ({ entryState: { _id, name } }) => {
 	const [showCreateEntry, setShowCreateEntry] = useState(false);
 	const [dragOver, setDragOver] = useState(false);
-	const { entries, changeEntryState } = useContext(EntriesContext);
+	const { entries, changeEntry } = useContext(EntriesContext);
 	const { dragItem, endDrag } = useContext(EntryDragContext);
 	const filteredEntries = useMemo(
 		() => entries.filter(({ stateId }) => stateId === _id),
@@ -34,7 +34,7 @@ const EntryState: FC<EntryStateProps> = ({ entryState: { _id, name } }) => {
 		endDrag();
 		setDragOver(false);
 		if (!id || stateId === _id) return;
-		changeEntryState(id, _id);
+		changeEntry(id, { stateId: _id });
 	};
 	const onDragOver = (event: DragEvent<HTMLDivElement>): void => {
 		event.preventDefault();

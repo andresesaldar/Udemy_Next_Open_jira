@@ -12,32 +12,7 @@ export type EntryStatesState = {
 };
 
 const initialEntryStatesState: EntryStatesState = {
-	entryStates: [
-		{
-			_id: "1",
-			createdAt: 102938,
-			name: "To Do",
-			position: 1,
-		},
-		{
-			_id: "2",
-			createdAt: 102938,
-			name: "In Progress",
-			position: 2,
-		},
-		{
-			_id: "4",
-			createdAt: 102938,
-			name: "Completed",
-			position: 4,
-		},
-		{
-			_id: "3",
-			createdAt: 102938,
-			name: "QA",
-			position: 3,
-		},
-	],
+	entryStates: [],
 };
 
 export type EntryStatesActions =

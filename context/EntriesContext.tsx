@@ -5,33 +5,37 @@ import {
 	EntriesState,
 	useEntriesReducer,
 } from "../reducers/entries";
+import {
+	createEntry,
+	getAllEntries,
+	updateEntry,
+} from "../integration/entries";
 import Entry from "../models/entry";
 
 type EntriesMutations = {
-	setEntries: (entries: Entry[]) => void;
 	addEntry: (entryData: Pick<Entry, "title" | "content" | "stateId">) => void;
-	changeEntryState: (id: string, stateId: string) => void;
+	changeEntry: (id: string, update: Partial<Entry>) => void;
+	loadEntries: () => void;
 };
 
 const entriesMutations = (
 	dispatch: Dispatch<EntriesActions>,
 ): EntriesMutations => ({
-	addEntry: (entryData) =>
+	addEntry: async (entryData) =>
 		dispatch({
-			payload: {
-				...entryData,
-				_id: Math.random().toString(),
-				createdAt: Date.now(),
-			},
+			payload: await createEntry(entryData),
 			type: EntriesActionTypes.ADD_ENTRY,
 		}),
-	changeEntryState: (id, stateId) =>
+	changeEntry: async (id, update) =>
 		dispatch({
-			payload: { id, stateId },
-			type: EntriesActionTypes.CHANGE_ENTRY_STATE,
+			payload: { id, update: await updateEntry(id, update) },
+			type: EntriesActionTypes.CHANGE_ENTRY,
 		}),
-	setEntries: (entries) =>
-		dispatch({ payload: entries, type: EntriesActionTypes.SET_ENTRIES }),
+	loadEntries: async () =>
+		dispatch({
+			payload: await getAllEntries(),
+			type: EntriesActionTypes.SET_ENTRIES,
+		}),
 });
 
 type EntriesContextData = EntriesState & EntriesMutations;

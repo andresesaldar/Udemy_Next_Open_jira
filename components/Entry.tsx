@@ -36,7 +36,11 @@ const Entry: FC<EntryProps> = ({ entry }) => {
 						subheader="30 minutes ago"
 					/>
 					<CardContent>
-						<Typography variant="body2" color="text.secondary">
+						<Typography
+							component="pre"
+							variant="body2"
+							color="text.secondary"
+						>
 							{entry.content}
 						</Typography>
 					</CardContent>

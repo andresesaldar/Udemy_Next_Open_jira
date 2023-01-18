@@ -5,30 +5,30 @@ import {
 	EntryStatesState,
 	useEntryStatesReducer,
 } from "../reducers/entry-states";
+import {
+	createEntryState,
+	getAllEntryStates,
+} from "../integration/entry-states";
 import EntryState from "../models/entry-state";
 
 type EntryStatesMutations = {
-	setEntryStates: (entryStates: EntryState[]) => void;
 	addEntryState: (
 		entryStateData: Pick<EntryState, "name" | "position">,
 	) => void;
+	loadEntryStates: () => void;
 };
 
 const entryStatesMutations = (
 	dispatch: Dispatch<EntryStatesActions>,
 ): EntryStatesMutations => ({
-	addEntryState: (entryStateData) =>
+	addEntryState: async (entryStateData) =>
 		dispatch({
-			payload: {
-				...entryStateData,
-				_id: Math.random().toString(),
-				createdAt: Date.now(),
-			},
+			payload: await createEntryState(entryStateData),
 			type: EntryStatesActionTypes.ADD_ENTRY_STATE,
 		}),
-	setEntryStates: (entryStates) =>
+	loadEntryStates: async () =>
 		dispatch({
-			payload: entryStates,
+			payload: await getAllEntryStates(),
 			type: EntryStatesActionTypes.SET_ENTRY_STATES,
 		}),
 });
