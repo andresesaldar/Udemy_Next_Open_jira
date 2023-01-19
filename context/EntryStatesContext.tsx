@@ -5,17 +5,13 @@ import {
 	EntryStatesState,
 	useEntryStatesReducer,
 } from "../reducers/entry-states";
-import {
-	createEntryState,
-	getAllEntryStates,
-} from "../integration/entry-states";
 import EntryState from "../models/entry-state";
+import { createEntryState } from "../integration/entry-states";
 
 type EntryStatesMutations = {
 	addEntryState: (
 		entryStateData: Pick<EntryState, "name" | "position">,
-	) => void;
-	loadEntryStates: () => void;
+	) => Promise<void>;
 };
 
 const entryStatesMutations = (
@@ -26,11 +22,6 @@ const entryStatesMutations = (
 			payload: await createEntryState(entryStateData),
 			type: EntryStatesActionTypes.ADD_ENTRY_STATE,
 		}),
-	loadEntryStates: async () =>
-		dispatch({
-			payload: await getAllEntryStates(),
-			type: EntryStatesActionTypes.SET_ENTRY_STATES,
-		}),
 });
 
 type EntryStatesContextData = EntryStatesState & EntryStatesMutations;
@@ -39,8 +30,15 @@ const EntryStatesContext: Context<EntryStatesContextData> = createContext(
 	{} as EntryStatesContextData,
 );
 
-export const EntryStatesProvider: FC<PropsWithChildren> = ({ children }) => {
-	const [state, dispatch] = useEntryStatesReducer();
+type EntryStatesProviderProps = {
+	entryStates?: EntryState[];
+} & PropsWithChildren;
+
+export const EntryStatesProvider: FC<EntryStatesProviderProps> = ({
+	children,
+	entryStates,
+}) => {
+	const [state, dispatch] = useEntryStatesReducer(entryStates);
 	return (
 		<EntryStatesContext.Provider
 			value={{ ...state, ...entryStatesMutations(dispatch) }}

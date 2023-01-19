@@ -5,17 +5,14 @@ import {
 	EntriesState,
 	useEntriesReducer,
 } from "../reducers/entries";
-import {
-	createEntry,
-	getAllEntries,
-	updateEntry,
-} from "../integration/entries";
+import { createEntry, updateEntry } from "../integration/entries";
 import Entry from "../models/entry";
 
 type EntriesMutations = {
-	addEntry: (entryData: Pick<Entry, "title" | "content" | "stateId">) => void;
-	changeEntry: (id: string, update: Partial<Entry>) => void;
-	loadEntries: () => void;
+	addEntry: (
+		entryData: Pick<Entry, "title" | "content" | "stateId">,
+	) => Promise<void>;
+	changeEntry: (id: string, update: Partial<Entry>) => Promise<void>;
 };
 
 const entriesMutations = (
@@ -31,11 +28,6 @@ const entriesMutations = (
 			payload: { id, update: await updateEntry(id, update) },
 			type: EntriesActionTypes.CHANGE_ENTRY,
 		}),
-	loadEntries: async () =>
-		dispatch({
-			payload: await getAllEntries(),
-			type: EntriesActionTypes.SET_ENTRIES,
-		}),
 });
 
 type EntriesContextData = EntriesState & EntriesMutations;
@@ -44,8 +36,15 @@ const EntriesContext: Context<EntriesContextData> = createContext(
 	{} as EntriesContextData,
 );
 
-export const EntriesProvider: FC<PropsWithChildren> = ({ children }) => {
-	const [state, dispatch] = useEntriesReducer();
+type EntriesProviderProps = {
+	entries?: Entry[];
+} & PropsWithChildren;
+
+export const EntriesProvider: FC<EntriesProviderProps> = ({
+	children,
+	entries,
+}) => {
+	const [state, dispatch] = useEntriesReducer(entries);
 	return (
 		<EntriesContext.Provider
 			value={{ ...state, ...entriesMutations(dispatch) }}

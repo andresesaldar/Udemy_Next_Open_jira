@@ -9,6 +9,8 @@ import {
 import { DragEvent, FC, useContext } from "react";
 import Entry from "../models/entry";
 import EntryDragContext from "../context/EntryDragContext";
+import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/router";
 
 type EntryProps = {
 	entry: Entry;
@@ -16,12 +18,15 @@ type EntryProps = {
 
 const Entry: FC<EntryProps> = ({ entry }) => {
 	const { startDrag, endDrag } = useContext(EntryDragContext);
+	const router = useRouter();
 	const onDragStart = (event: DragEvent<HTMLElement>): void => {
 		event.dataTransfer.setData("id", entry._id);
 		event.dataTransfer.setData("statIid", entry.stateId);
 		startDrag(entry);
 	};
 	const onDragEnd = (): void => endDrag();
+	const onClick = (): Promise<boolean> =>
+		router.push(`/entries/${entry._id}`);
 	return (
 		<Box padding={0.5}>
 			<Card
@@ -29,17 +34,28 @@ const Entry: FC<EntryProps> = ({ entry }) => {
 				draggable
 				onDragStart={onDragStart}
 				onDragEnd={onDragEnd}
+				onClick={onClick}
 			>
 				<CardActionArea>
 					<CardHeader
+						sx={{
+							wordBreak: "break-word",
+						}}
 						title={entry.title}
-						subheader="30 minutes ago"
+						subheader={
+							formatDistanceToNow(new Date(entry.createdAt)) +
+							" ago"
+						}
 					/>
 					<CardContent>
 						<Typography
-							component="pre"
 							variant="body2"
 							color="text.secondary"
+							component="pre"
+							sx={{
+								whiteSpace: "pre-wrap",
+								wordBreak: "break-word",
+							}}
 						>
 							{entry.content}
 						</Typography>

@@ -1,5 +1,6 @@
 import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import { FC, useContext } from "react";
+import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import SidebarContext from "../context/SidebarContext";
 
@@ -19,13 +20,18 @@ const Navbar: FC = () => {
 					>
 						<MenuIcon />
 					</IconButton>
-					<Typography
-						variant="h6"
-						component="div"
-						sx={{ flexGrow: 1 }}
+					<Link
+						href="/"
+						style={{ color: "inherit", textDecoration: "none" }}
 					>
-						OpenJira
-					</Typography>
+						<Typography
+							variant="h6"
+							component="div"
+							sx={{ flexGrow: 1 }}
+						>
+							OpenJira
+						</Typography>
+					</Link>
 				</Toolbar>
 			</AppBar>
 		</Box>

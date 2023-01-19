@@ -42,64 +42,64 @@ const CreateEntryStateForm: FC<CreateEntryStateForm> = ({
 		setName(target.value);
 	const onPositionChange = ({ target }: SelectChangeEvent<number>): void =>
 		setPosition(Number(target.value));
-	const onFormSubmit = (event: FormEvent<HTMLFormElement>): void => {
+	const onFormSubmit = (event: FormEvent<HTMLDivElement>): void => {
 		event.preventDefault();
 		addEntryState({ name, position });
 		onClose();
 	};
 	return (
 		<Box padding={0.5}>
-			<Card sx={{ marginTop: 1 }}>
-				<form onSubmit={onFormSubmit}>
-					<CardContent>
-						<TextField
-							autoFocus
-							size="small"
-							fullWidth
-							margin="dense"
-							id="name"
-							label="Name"
+			<Card
+				sx={{ marginTop: 1 }}
+				component="form"
+				onSubmit={onFormSubmit}
+			>
+				<CardContent>
+					<TextField
+						autoFocus
+						size="small"
+						fullWidth
+						margin="dense"
+						id="name"
+						label="Name"
+						required
+						value={name}
+						onChange={onNameChange}
+					/>
+					<FormControl size="small" fullWidth margin="dense">
+						<InputLabel id="position-label">Position</InputLabel>
+						<Select
+							labelId="position-label"
+							id="position"
+							label="Position"
 							required
-							value={name}
-							onChange={onNameChange}
-						/>
-						<FormControl size="small" fullWidth margin="dense">
-							<InputLabel id="position-label">
-								Position
-							</InputLabel>
-							<Select
-								labelId="position-label"
-								id="position"
-								label="Position"
-								required
-								value={position}
-								onChange={onPositionChange}
-							>
-								{entryStates.map((_, index) => (
-									<MenuItem key={index} value={index + 1}>
-										{index + 1}
-									</MenuItem>
-								))}
-								<MenuItem value={defaultPosition}>
-									{defaultPosition}
+							value={position}
+							onChange={onPositionChange}
+						>
+							{entryStates.map((_, index) => (
+								<MenuItem key={index} value={index + 1}>
+									{index + 1}
 								</MenuItem>
-							</Select>
-						</FormControl>
-					</CardContent>
-					<CardActions
-						sx={{
-							display: "flex",
-							justifyContent: "space-between",
-						}}
-					>
-						<Button size="small" onClick={onClose}>
-							Cancel
-						</Button>
-						<Button variant="outlined" size="small" type="submit">
-							Create
-						</Button>
-					</CardActions>
-				</form>
+							))}
+							<MenuItem value={defaultPosition}>
+								{defaultPosition}
+							</MenuItem>
+						</Select>
+					</FormControl>
+				</CardContent>
+				<CardActions
+					sx={{
+						display: "flex",
+						justifyContent: "space-between",
+					}}
+				>
+					<Button size="small" onClick={onClose}>
+						Cancel
+					</Button>
+					<Button variant="outlined" size="small" type="submit">
+						Create
+					</Button>
+				</CardActions>
 			</Card>
 		</Box>
 	);

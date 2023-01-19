@@ -1,11 +1,6 @@
 import Entry from "../models/entry";
 import httpClient from ".";
 
-export const getAllEntries = (): Promise<Entry[]> =>
-	httpClient
-		.get<{ entries: Entry[] }>("/entries")
-		.then(({ data: { entries } }) => entries);
-
 export const createEntry = ({
 	content,
 	stateId,
@@ -30,3 +25,8 @@ export const updateEntry = (
 			title,
 		})
 		.then(({ data: { updated } }) => updated);
+
+export const deleteEntry = (id: string): Promise<Entry> =>
+	httpClient
+		.delete<{ entry: Entry }>(`/entries/${id}`)
+		.then(({ data: { entry } }) => entry);

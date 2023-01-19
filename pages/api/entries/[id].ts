@@ -6,9 +6,16 @@ import EntryStateModel from "../../../database/entry-state-model";
 import connect from "../../../database";
 import { isValidObjectId } from "mongoose";
 
-const getEntry = async (id: string): Promise<Entry> => {
+export const getEntry = async (id: string): Promise<Entry> => {
 	await connect();
 	const entry = await EntryModel.findById(id);
+	if (!entry) throw new BadRequestException();
+	return entry;
+};
+
+const deleteEntry = async (id: string): Promise<Entry> => {
+	await connect();
+	const entry = await EntryModel.findByIdAndDelete(id);
 	if (!entry) throw new BadRequestException();
 	return entry;
 };
@@ -55,6 +62,10 @@ const handler = async (
 			case "GET":
 				return res.status(200).json({
 					entry: await getEntry(id),
+				});
+			case "DELETE":
+				return res.status(200).json({
+					entry: await deleteEntry(id),
 				});
 			default:
 				return res.status(404).send(undefined);

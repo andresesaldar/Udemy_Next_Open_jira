@@ -14,6 +14,7 @@ import EntriesContext from "../context/EntriesContext";
 import Entry from "./Entry";
 import EntryDragContext from "../context/EntryDragContext";
 import EntryState from "../models/entry-state";
+import SnackbarContext from "../context/SnackbarContext";
 
 type EntryStateProps = {
 	entryState: EntryState;
@@ -23,25 +24,29 @@ const EntryState: FC<EntryStateProps> = ({ entryState: { _id, name } }) => {
 	const [showCreateEntry, setShowCreateEntry] = useState(false);
 	const [dragOver, setDragOver] = useState(false);
 	const { entries, changeEntry } = useContext(EntriesContext);
+	const { showSnack } = useContext(SnackbarContext);
 	const { dragItem, endDrag } = useContext(EntryDragContext);
 	const filteredEntries = useMemo(
 		() => entries.filter(({ stateId }) => stateId === _id),
 		[entries, _id],
 	);
-	const onDrop = (event: DragEvent<HTMLDivElement>): void => {
+	const onDrop = async (event: DragEvent<HTMLDivElement>): Promise<void> => {
 		const id = event.dataTransfer.getData("id");
 		const stateId = event.dataTransfer.getData("stateId");
 		endDrag();
 		setDragOver(false);
 		if (!id || stateId === _id) return;
-		changeEntry(id, { stateId: _id });
+		await changeEntry(id, { stateId: _id });
+		showSnack({
+			message: `Entry moved to ${name} successfully`,
+			severity: "success",
+		});
 	};
 	const onDragOver = (event: DragEvent<HTMLDivElement>): void => {
 		event.preventDefault();
 		setDragOver(true);
 	};
 	const onDragLeave = (): void => setDragOver(false);
-
 	return (
 		<Box>
 			<Card variant="outlined">

@@ -7,9 +7,14 @@ import { SidebarProvider } from "../context/SidebarContext";
 
 type MainLayoutProps = {
 	title?: string;
+	fluid?: boolean;
 } & PropsWithChildren;
 
-const MainLayout: FC<MainLayoutProps> = ({ children, title = "Open Jira" }) => (
+const MainLayout: FC<MainLayoutProps> = ({
+	children,
+	title = "Open Jira",
+	fluid,
+}) => (
 	<>
 		<Head>
 			<title>{title}</title>
@@ -18,7 +23,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children, title = "Open Jira" }) => (
 			<Navbar />
 			<Sidebar />
 		</SidebarProvider>
-		<Container maxWidth="xl" sx={{ paddingY: 1 }}>
+		<Container maxWidth={fluid ? "xl" : undefined} sx={{ paddingY: 1 }}>
 			<main>{children}</main>
 		</Container>
 	</>

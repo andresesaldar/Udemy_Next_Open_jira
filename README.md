@@ -15,3 +15,4 @@ docker-compose up -d
 Setup the following environment variables on the **.env.local** file.
 
 - MONGO_URL: Db connection url
+- NEXT_PUBLIC_BASE_URL: Base api integration url

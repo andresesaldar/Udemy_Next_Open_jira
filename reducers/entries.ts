@@ -12,10 +12,6 @@ export type EntriesState = {
 	entries: Entry[];
 };
 
-const initialEntriesState: EntriesState = {
-	entries: [],
-};
-
 export type EntriesActions =
 	| Action<EntriesActionTypes.SET_ENTRIES, Entry[]>
 	| Action<EntriesActionTypes.ADD_ENTRY, Entry>
@@ -57,5 +53,7 @@ const entriesReducer: Reducer<EntriesState, EntriesActions> = (
 	}
 };
 
-export const useEntriesReducer = (): [EntriesState, Dispatch<EntriesActions>] =>
-	useReducer(entriesReducer, initialEntriesState);
+export const useEntriesReducer = (
+	entries: Entry[] = [],
+): [EntriesState, Dispatch<EntriesActions>] =>
+	useReducer(entriesReducer, { entries });

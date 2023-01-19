@@ -4,7 +4,7 @@ import EntryState from "../../../models/entry-state";
 import EntryStateModel from "../../../database/entry-state-model";
 import connect from "../../../database";
 
-const getAllEntryStates = async (): Promise<EntryState[]> => {
+export const getAllEntryStates = async (): Promise<EntryState[]> => {
 	await connect();
 	return EntryStateModel.find().sort({ position: "asc" });
 };

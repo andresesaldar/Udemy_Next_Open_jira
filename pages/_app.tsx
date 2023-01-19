@@ -7,7 +7,7 @@ import useTheme from "../themes";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-	getLayout?: (page: ReactElement) => ReactElement;
+	getLayout?: (page: ReactElement, props: P) => ReactElement;
 };
 
 type AppPropsWithLayout = AppProps & {
@@ -23,7 +23,7 @@ const App: FC<AppPropsWithLayout> = ({
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			{getLayout(<Component {...pageProps} />)}
+			{getLayout(<Component {...pageProps} />, pageProps)}
 		</ThemeProvider>
 	);
 };
