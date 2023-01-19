@@ -21,7 +21,7 @@ const Entry: FC<EntryProps> = ({ entry }) => {
 	const router = useRouter();
 	const onDragStart = (event: DragEvent<HTMLElement>): void => {
 		event.dataTransfer.setData("id", entry._id);
-		event.dataTransfer.setData("statIid", entry.stateId);
+		event.dataTransfer.setData("stateId", entry.stateId);
 		startDrag(entry);
 	};
 	const onDragEnd = (): void => endDrag();
