@@ -15,6 +15,12 @@ const createEntryState = async ({
 }: Pick<EntryState, "name" | "position">): Promise<EntryState> => {
 	if (!name || !position) throw new BadRequestException();
 	await connect();
+	if (position <= 0) throw new BadRequestException();
+	const maxPositionEntryState = await EntryStateModel.findOne().sort({
+		position: -1,
+	});
+	if (position > (maxPositionEntryState?.position || 1) + 1)
+		throw new BadRequestException();
 	await EntryStateModel.updateMany(
 		{ position: { $gte: position } },
 		{

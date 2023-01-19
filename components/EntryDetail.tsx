@@ -7,9 +7,7 @@ import {
 	MenuItem,
 	Select,
 	Stack,
-	TextField,
 	Typography,
-	TypographyVariant,
 } from "@mui/material";
 import { FC, FormEvent, useContext, useState } from "react";
 import { deleteEntry, updateEntry } from "../integration/entries";
@@ -18,73 +16,9 @@ import Entry from "../models/entry";
 import EntryState from "../models/entry-state";
 import SaveIcon from "@mui/icons-material/Save";
 import SnackbarContext from "../context/SnackbarContext";
+import TextFieldWithPreview from "./TextFieldWithPreview";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/router";
-
-type TextFieldWithPreviewProps = {
-	value: string;
-	setValue: (val: string) => void;
-	label: string;
-	variant?: TypographyVariant;
-	component?: React.ElementType;
-	required?: boolean;
-	multiline?: boolean;
-};
-
-const TextFieldWithPreview: FC<TextFieldWithPreviewProps> = ({
-	value,
-	setValue,
-	label,
-	variant,
-	required,
-	multiline,
-}) => {
-	const [editable, setEditable] = useState(false);
-	return editable ? (
-		<TextField
-			margin="normal"
-			fullWidth
-			value={value}
-			autoFocus
-			focused
-			label={label}
-			color="primary"
-			onBlur={(event): void => {
-				if (required && value.replaceAll(" ", "").length <= 0)
-					return event.target.focus();
-				setEditable(false);
-			}}
-			required={required}
-			onChange={(event): void => setValue(event.target.value)}
-			multiline={multiline}
-		/>
-	) : (
-		<Box
-			onClick={(): void => setEditable(true)}
-			onFocus={(): void => setEditable(true)}
-			sx={{
-				":hover": { borderColor: "primary.light" },
-				borderColor: "transparent",
-			}}
-			padding={2}
-			borderRadius={1}
-			border={0.5}
-			tabIndex={0}
-		>
-			<Typography
-				variant={variant}
-				margin={0}
-				component="pre"
-				sx={{
-					whiteSpace: "pre-wrap",
-					wordBreak: "break-word",
-				}}
-			>
-				{value}
-			</Typography>
-		</Box>
-	);
-};
 
 type EntryDetailProps = {
 	entry: Entry;
@@ -99,7 +33,7 @@ const EntryDetail: FC<EntryDetailProps> = ({ entry, entryStates }) => {
 	const router = useRouter();
 	const onDeleteClick = async (): Promise<void> => {
 		await deleteEntry(entry._id);
-		router.push("/");
+		router.replace("/");
 	};
 	const onSubmit = async (
 		event: FormEvent<HTMLDivElement>,
@@ -137,7 +71,7 @@ const EntryDetail: FC<EntryDetailProps> = ({ entry, entryStates }) => {
 				<Select
 					labelId="state-label"
 					id="state"
-					label="Position"
+					label="State"
 					required
 					value={stateId}
 					onChange={(event): void => setStateId(event.target.value)}

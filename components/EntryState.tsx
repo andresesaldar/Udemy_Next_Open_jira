@@ -14,6 +14,7 @@ import EntriesContext from "../context/EntriesContext";
 import Entry from "./Entry";
 import EntryDragContext from "../context/EntryDragContext";
 import EntryState from "../models/entry-state";
+import Link from "next/link";
 import SnackbarContext from "../context/SnackbarContext";
 
 type EntryStateProps = {
@@ -57,7 +58,15 @@ const EntryState: FC<EntryStateProps> = ({ entryState: { _id, name } }) => {
 							justifyContent="space-between"
 							alignItems="center"
 						>
-							<Typography variant="h5">{name}</Typography>
+							<Link
+								href={"/entry-states/" + _id}
+								style={{
+									color: "inherit",
+									textDecoration: "none",
+								}}
+							>
+								<Typography variant="h5">{name}</Typography>
+							</Link>
 							<Tooltip title="Add entry" arrow placement="left">
 								<IconButton
 									color="primary"
